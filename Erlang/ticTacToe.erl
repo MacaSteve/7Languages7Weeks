@@ -5,7 +5,7 @@
 -export([isLineWinning/1]).
 -export([isThereAWinner/1]).
 -export([allTheSameSymbol/1]).
--export([runTestCases/1]).
+-export([whoIsTheWinner/1]).
 
 winner(Board) ->
 	{P1, P2, P3, P4, P5, P6, P7, P8, P9} = Board,
@@ -15,7 +15,7 @@ winner(Board) ->
 			[P1, P4, P7],[P2, P5, P8],[P3, P6, P9],	% Columns
 			[P1, P5, P9],[P3, P5, P7]				% Diagonals
 		],
-	isThereAWinner(AllLines).
+	whoIsTheWinner(AllLines).
 	
 
 allTheSameSymbol(Line) ->  
@@ -28,3 +28,17 @@ isLineWinning(Line) -> allCrosses(Line) or allNaughts(Line).
 
 isThereAWinner([Line]) -> isLineWinning(Line);
 isThereAWinner([Head|Tail]) -> isLineWinning(Head) or isThereAWinner(Tail).
+
+whoIsTheWinner([Line]) -> 
+	[Sym,_,_] = Line,
+	case isLineWinning(Line) of
+		true -> Sym;
+		false -> "No winner!"
+	end;
+
+whoIsTheWinner([Head|Tail]) ->
+	[Sym,_,_] = Head,
+	case isLineWinning(Head) of
+		true -> Sym;
+		false -> whoIsTheWinner(Tail)
+	end.
